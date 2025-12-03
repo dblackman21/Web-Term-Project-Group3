@@ -1,3 +1,8 @@
-# Web-Term-Project-Group3
+<h1>Web-Term-Project-Group3</h1> 
 
-Selling a biometric tracking device akin to the WHOOP or Apple Watch
+Authors: Devon Blackman, Ian Brown, David Wu
+
+<h2>Bridge-IT</h2>
+
+An e-commerce store selling an advance fitness tracking device and wearable accessories.
+
