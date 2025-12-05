@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridge-IT - Create an account</title>
+    <script src="../js/register.js" defer></script> 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --hover_color: #6ccf64;
+            --faded_color: linear-gradient(135deg, #196816 0%, #000000 100%);
+            --theme :#13490e;
+        }
+
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            
+            /*To be determined*/
+            background: grey;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signup-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .signup-header {
+            background: var(--faded_color);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .signup-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .signup-form {
+            padding: 40px 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group.half {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--hover_color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { 
+            width: 33%; 
+            background: #ff4757; 
+        }
+
+        .strength-medium { 
+            width: 66%; 
+            background: #ffa502; 
+        }
+
+        .strength-strong { 
+            width: 100%; 
+            background: #26de81; 
+        }
+
+        .terms-agreement {
+            margin: 25px 0;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .terms-agreement input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .terms-agreement a {
+            color: var(--theme);
+            text-decoration: none;
+        }
+
+        .terms-agreement a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-signup {
+            width: 100%;
+            padding: 16px;
+            background: var(--faded_color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-signup:active {
+            transform: translateY(0);
+        }
+
+        .btn-signup:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: var(--theme);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: var(--hover_color);
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ff4757;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                border-radius: 15px;
+            }
+
+            .signup-header {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                font-size: 28px;
+            }
+
+            .signup-form {
+                padding: 30px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-group.half {
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-header">
+            <div class="logo">BRIDGE-IT</div>
+            <p>Create an account</p>
+        </div>
+
+        <form class="signup-form" onsubmit="handleSignup(event)">
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="firstname">Firstname</label>
+                    <input 
+                        type="text" 
+                        id="firstname" 
+                        name="firstname" 
+                        placeholder="John"
+                        required
+                    >
+                </div>
+
+                <div class="form-group half">
+                    <label for="lastname">Name</label>
+                    <input 
+                        type="text" 
+                        id="lastname" 
+                        name="lastname" 
+                        placeholder="Doe"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="your@email.com"
+                    required
+                >
+                <div class="error-message" id="email-error">This email is already used</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="••••••••"
+                    required
+                    oninput="checkPasswordStrength()"
+                >
+                <div class="password-strength">
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strength-fill"></div>
+                    </div>
+                    <span id="strength-text"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirm password</label>
+                <input 
+                    type="password" 
+                    id="confirm-password" 
+                    name="confirm-password" 
+                    placeholder="••••••••"
+                    required
+                >
+                <div class="error-message" id="password-error">Passwords don't match</div>
+            </div>
+
+            <div class="terms-agreement">
+                <label>
+                    <input type="checkbox" id="terms" required>
+                    I accept the <a href="#">General Terms and Conditions</a> and <a href="#">confidential policies</a>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-signup">Create my account</button>
+
+            <div class="divider">ou</div>
+
+            <div class="login-link">
+                Already have an account ?
+                <a href="login.html">Log in</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
