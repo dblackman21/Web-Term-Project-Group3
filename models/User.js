@@ -14,11 +14,12 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+
     required: [true, 'Email is required'],
     unique: true,
     lowercase: true,
     trim: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email invalide']
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'invalid email']
   },
   password: {
     type: String,
@@ -50,7 +51,6 @@ userSchema.pre('save', async function() {
 
 // 3. Méthode comparePassword
 userSchema.methods.comparePassword = async function(candidatePassword) {
-  // À COMPLÉTER :
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
