@@ -40,6 +40,12 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'API Bridge-IT working' });
 });
 
-app.listen(PORT, () => {
+// Export app for testing
+module.exports = app;
+
+// Only start server if not in test mode
+if (require.main === module) {
+  app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
-});
+  });
+}
