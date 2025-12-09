@@ -34,7 +34,7 @@ exports.addToCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
     
-    if (!productId || !quantity) {
+    if (!productId || quantity == null) {
       return res.status(400).json({
         success: false,
         message: 'Product ID and quantity are required'
