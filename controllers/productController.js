@@ -10,10 +10,6 @@ exports.getAllProducts = async (req, res) => {
     let filter = {};
     
     // Apply filters
-    if (category) {
-      filter.category = category;
-    }
-    
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = Number(minPrice);

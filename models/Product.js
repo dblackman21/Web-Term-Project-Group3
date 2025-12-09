@@ -51,9 +51,8 @@ const productSchema = new mongoose.Schema({
 });
 
 // Update timestamp before saving
-productSchema.pre('save', function(next) {
+productSchema.pre('save', async function() {
   this.updatedAt = Date.now();
-  next();
 });
 
 // Check if product is available for purchase
