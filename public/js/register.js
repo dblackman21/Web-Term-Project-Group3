@@ -29,7 +29,7 @@ function checkPasswordStrength() {
     }
 }
 
-function handleSignup(event) {
+async function handleSignup(event) {
     event.preventDefault();
 
     const password = document.getElementById('password').value;
@@ -47,6 +47,20 @@ function handleSignup(event) {
     const lastname = document.getElementById('lastname').value;
     const email = document.getElementById('email').value;
 
-    alert('Account created with success for: ' + firstname + ' ' + lastname);
     /* Add account to database */
+    const response = await fetch("/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstname, lastname, email, password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert("Account created successfully!");
+        // Redirect user to login page
+        window.location.href = "/pages/login.html";
+    } else {
+        alert(data.message || "Registration error");
+    }
 }
