@@ -220,9 +220,18 @@ exports.removeFromCart = async (req, res) => {
         message: 'Product ID is required'
       });
     }
-    
-    // Get cart (unified logic)
-    const cart = await getOrCreateCart(req, res);
+
+    const sessionId = req.cookies.guestSessionId;
+    const userId = req.user?._id;
+
+    const cart = await Cart.findOne(userId ? { userId } : { sessionId });
+
+    if (!cart) {
+        return res.status(404).json({
+            success: false,
+            message: "Cart not found"
+        });
+    }
     
     // Remove item
     await cart.removeItem(productId);
