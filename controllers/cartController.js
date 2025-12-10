@@ -50,23 +50,24 @@ const getOrCreateCart = async (req, res) => {
  */
 exports.getCart = async (req, res) => {
   try {
-    const cart = await getOrCreateCart(req, res);
-    
-    return res.json({
-      success: true,
-      cart,
-      isGuest: !req.user
-    });
-    
-  } catch (err) {
-    console.error('GET CART ERROR:', err);
-    return res.status(500).json({
-      success: false,
-      message: 'Internal server error'
-    });
+    const userId = req.user?.id;
+    const sessionId = req.cookies.guestSessionId;
+
+    const query = userId ? { userId } : sessionId ? { sessionId } : null;
+
+    // Ni user, ni sessionId → aucun panier
+    if (!query) {
+      return res.status(200).json(null);
+    }
+
+    const cart = await Cart.findOne(query).populate("items.product");
+    return res.json(cart);
+
+  } catch (error) {
+    console.error("GET CART ERROR", error);
+    res.status(500).json({ success: false });
   }
 };
-
 /**
  * Add item to cart (works for both authenticated and guest users)
  */
