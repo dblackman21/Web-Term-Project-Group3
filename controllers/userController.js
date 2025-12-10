@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Cart = require("../models/Cart");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -11,6 +12,71 @@ const generateToken = (userId) => {
     process.env.JWT_SECRET,
     { expiresIn: '7d' }
   );
+};
+
+/**
+ * Helper: Merge guest cart into user cart after login/register
+ */
+const mergeGuestCartAfterLogin = async (userId, req, res) => {
+  try {
+    // Get guest session ID from cookie
+    const guestSessionId = req.cookies.guestSessionId;
+    
+    if (!guestSessionId) {
+      return null; // No guest cart to merge
+    }
+    
+    // Find guest cart
+    const guestCart = await Cart.findOne({ sessionId: guestSessionId });
+    
+    if (!guestCart || guestCart.items.length === 0) {
+      // Clear cookie even if cart is empty
+      res.clearCookie('guestSessionId');
+      return null; // No items to merge
+    }
+    
+    // Find or create user cart
+    let userCart = await Cart.findOne({ userId });
+    
+    if (!userCart) {
+      // No existing user cart - just convert guest cart to user cart
+      await guestCart.convertToUserCart(userId);
+      await guestCart.populate('items.product');
+      
+      // Delete the old guest cart reference (it's now a user cart)
+      await Cart.deleteOne({ sessionId: guestSessionId });
+      
+      // Clear guest session cookie
+      res.clearCookie('guestSessionId');
+      
+      return guestCart;
+    }
+    
+    // Merge guest cart items into existing user cart
+    for (const guestItem of guestCart.items) {
+      await userCart.addItem(
+        guestItem.product,
+        guestItem.quantity,
+        guestItem.price
+      );
+    }
+    
+    // Delete guest cart
+    await Cart.deleteOne({ sessionId: guestSessionId });
+    
+    // Clear guest session cookie
+    res.clearCookie('guestSessionId');
+    
+    await userCart.populate('items.product');
+    
+    return userCart;
+    
+  } catch (err) {
+    console.error('AUTO MERGE CART ERROR:', err);
+    // Clear cookie even on error to prevent repeated attempts
+    res.clearCookie('guestSessionId');
+    return null; // Don't block login/register if merge fails
+  }
 };
 
 /**
@@ -41,11 +107,15 @@ exports.registerUser = async (req, res) => {
 
     const token = generateToken(user._id);
 
+    // Merge guest cart
+    const mergedCart = await mergeGuestCartAfterLogin(user._id, req, res);
+
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
       token,
-      user: user.toJSON()
+      user: user.toJSON(),
+      cart: mergedCart // Include merged cart in response (null if no cart)
     });
 
   } catch (err) {
@@ -90,17 +160,21 @@ exports.loginUser = async (req, res) => {
       });
     }
     
-    //Update last Login
+    // Update last Login
     user.lastLogin = Date.now();
     await user.save();
 
     const token = generateToken(user._id);
 
+    // Merge guest cart
+    const mergedCart = await mergeGuestCartAfterLogin(user._id, req, res);
+
     return res.json({
       message: "Login successful",
       user: user.toJSON(),
       token,
-      success: true
+      success: true,
+      cart: mergedCart // Include merged cart in response (null if no cart)
     });
 
   } catch (err) {
@@ -116,8 +190,15 @@ exports.loginUser = async (req, res) => {
  * Logout user
  */
 exports.logoutUser = (req, res) => {
-  req.session.destroy(() => {
-    res.json({ message: "Logged out successfully" });
+  // Note: req.session.destroy() won't work anymore since we removed express-session
+  // JWT is stateless, so logout is handled client-side by removing the token
+  
+  // Optional: Clear any remaining cookies
+  res.clearCookie('guestSessionId');
+  
+  res.json({ 
+    success: true,
+    message: "Logged out successfully" 
   });
 };
 
