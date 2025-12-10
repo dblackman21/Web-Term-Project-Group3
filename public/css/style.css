@@ -33,6 +33,8 @@ body {
     align-items: center;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
     z-index: 10;
+    position: sticky;
+    top: 0;
 }
 .logo {
     font-size: 24px;
@@ -57,10 +59,11 @@ body {
 .category-nav {
     background-color: var(--bg-dark);
     border-bottom: 1px solid #333;
-    padding: 10px 20px;
+    padding: 14px 20px;
     overflow-x: auto; /*side scrolling possible if more added*/
     white-space: nowrap;
     -webkit-overflow-scrolling: touch; /*for mobile*/
+    
 }
 .category-list {
     display: inline-flex;
@@ -103,7 +106,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 50px 20px;
+    padding: 220px 20px;
 }
 .hero-content {
     display: flex;
@@ -352,24 +355,30 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.75);
     z-index: 1000;
     visibility: hidden;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s;
 }
 .menu-overlay.open {
     visibility: visible;
-    opacity: 1;
+    opacity: 0.98;
 }
 .menu-content {
     background-color: var(--bg-medium);
-    width: 250px;
+    width: 100%;
     height: 100%;
     padding: 20px;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.5);
     transform: translateX(-100%);
     transition: transform 0.3s ease-out;
+}
+.menu-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-top: 50px;
 }
 .menu-overlay.open .menu-content {
     transform: translateX(0);
@@ -386,13 +395,17 @@ body {
     padding: 0;
 }
 .menu-link {
+    display: block;
     color: var(--text-light);
     text-decoration: none;
     font-size: 18px;
-    font-weight: 500;
-    padding: 10px 0;
-    border-bottom: 1px solid #333;
+    font-weight: 350;
+    padding: 15px 0;
+    border-bottom: 1px solid #555;
     transition: color 0.2s;
+}
+.menu-nav .menu-link:last-child {
+    border-bottom: none;
 }
 .menu-link:hover {
     color: var(--highlight-green);
@@ -417,6 +430,9 @@ body {
     .category-btn {
         padding: 6px 12px;
         font-size: 13px;
+    }
+    .hero-section{
+        padding: 137px;
     }
     .hero-title {
         font-size: 36px;
