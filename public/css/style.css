@@ -24,10 +24,11 @@ body {
     color: var(--text-light);
     display: flex;
     flex-direction: column; /* Main layout is column: Header, Nav, Main */
+    padding-bottom: 65px; /*makes room for bottom nav so footer is still visible*/
 }
 .main-header {
     background-color: var(--bg-medium);
-    padding: 15px 20px;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -55,7 +56,7 @@ body {
     color: var(--highlight-green);
 }
 
-/*category buttons nav bar; not sticky*/
+/*category buttons nav bar*/
 .category-nav {
     background-color: var(--bg-dark);
     border-bottom: 1px solid #333;
@@ -63,7 +64,9 @@ body {
     overflow-x: auto; /*side scrolling possible if more added*/
     white-space: nowrap;
     -webkit-overflow-scrolling: touch; /*for mobile*/
-    
+    position: sticky;
+    top: 62px;
+    z-index: 99;
 }
 .category-list {
     display: inline-flex;
@@ -268,10 +271,6 @@ body {
     font-weight: 600;
     line-height: 1.2;
 }
-.product-category {
-    font-size: 13px;
-    color: var(--text-medium);
-}
 .product-price-row {
     display: flex;
     justify-content: space-between;
@@ -404,11 +403,14 @@ body {
     border-bottom: 1px solid #555;
     transition: color 0.2s;
 }
+.menu-nav .menu-link:nth-last-child(2), /* targets login and register*/
 .menu-nav .menu-link:last-child {
-    border-bottom: none;
+color: var(--highlight-green);
+font-weight: 550;
 }
 .menu-link:hover {
     color: var(--highlight-green);
+    text-shadow: 0 0 10px rgba(108, 207, 100, 0.5);
 }
 /* MOBILE TWEAKS */
 @media (max-width: 600px) {
@@ -451,5 +453,11 @@ body {
     }
     .bottom-nav {
         display: flex;
+    }
+    .menu-content{
+        max-width: 100%;
+    }
+    .category-nav {
+        top: 57px;
     }
 }
