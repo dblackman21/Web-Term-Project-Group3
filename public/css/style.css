@@ -333,6 +333,116 @@ body {
     width: 100%;
 }
 
+/* Cart */
+.cart-main-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 0;
+    min-height: 60vh;
+}
+
+.cart-section {
+    background-color: var(--bg-medium);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 500px;
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.cart-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between;
+    background: #232323;
+    border-radius: 6px;
+    padding: 12px 10px;
+    gap: 10px;
+}
+
+.cart-item-image {
+    width: 50px; /* Set a fixed width for the image */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Space between image and text */
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #232323;
+    border-radius: 6px;
+    padding: 12px 10px;
+    gap: 10px;
+}
+
+.cart-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cart-item-name {
+    font-weight: 600;
+    color: var(--highlight-green);
+}
+
+.cart-item-qty {
+    font-size: 14px;
+    color: var(--text-medium);
+}
+
+.cart-item-price {
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.cart-remove-btn {
+    background: none;
+    border: none;
+    color: #ff5c5c;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.cart-remove-btn:hover {
+    background: #3a2323;
+}
+
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+}
+
+.cart-total-price {
+    color: var(--highlight-green);
+}
+
 /* MOBILE TWEAKS */
 @media (max-width: 600px) {
     .main-header {
