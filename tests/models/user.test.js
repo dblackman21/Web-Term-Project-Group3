@@ -8,7 +8,7 @@ mongoose.set("strictQuery", false);
 
 // Connect to test database before all tests
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect(process.env.MONGODB_TEST_URI);
   // Clean up any existing test data
   await User.deleteMany({});
 });
