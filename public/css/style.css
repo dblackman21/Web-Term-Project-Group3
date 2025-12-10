@@ -125,11 +125,12 @@ body {
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    color: #18aa57;
+    color: var(--text-medium);;
 }
 .tab.active {
-    background-color: #18aa57/20;
-    color: #18aa57;
+    background-color: rgba(108, 207, 100, 0.2);
+    color: var(--highlight-green);
+    font-weight:600;
 }
 .hero-title {
     font-size: 48px;
@@ -344,7 +345,58 @@ body {
     font-size: 14px;
     box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.2);
 }
-
+/*burger overlay*/
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.menu-overlay.open {
+    visibility: visible;
+    opacity: 1;
+}
+.menu-content {
+    background-color: var(--bg-medium);
+    width: 250px;
+    height: 100%;
+    padding: 20px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.5);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out;
+}
+.menu-overlay.open .menu-content {
+    transform: translateX(0);
+}
+.close-btn {
+    float: right;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text-light);
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+.menu-link {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    transition: color 0.2s;
+}
+.menu-link:hover {
+    color: var(--highlight-green);
+}
 /* MOBILE TWEAKS */
 @media (max-width: 600px) {
     .main-header {
