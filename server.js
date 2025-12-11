@@ -38,6 +38,12 @@ app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/pages/register.html'));
 });
 
+app.get('.product/:id', (req, res) => {
+    // David, line below is a stand in. You can put the op for DB
+    //   fetch here;
+    res.sendFile(path.join(__dirname, 'public/pages/product.html'));
+});
+
 app.use((req, res) => {
     res.status(404).send('<h1>404 Not Found</h1>');
 });

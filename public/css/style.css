@@ -24,7 +24,6 @@ body {
     color: var(--text-light);
     display: flex;
     flex-direction: column; /* Main layout is column: Header, Nav, Main */
-    padding-bottom: 65px; /*makes room for bottom nav so footer is still visible*/
 }
 .main-header {
     background-color: var(--bg-medium);
@@ -38,6 +37,8 @@ body {
     top: 0;
 }
 .logo {
+    text-decoration: none;
+    color: var(--text-light);
     font-size: 24px;
     font-weight: bold;
     letter-spacing: 1px;
@@ -527,7 +528,6 @@ body {
     border-top: 1px solid #333;
     padding: 8px 0;
     z-index: 100;
-    display: flex;
     justify-content: space-around;
     align-items:center;
 }

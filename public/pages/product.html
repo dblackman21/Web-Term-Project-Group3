@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/product.css">
+    <script src="../js/index.js" defer></script>
+    <!--Potential rework for other product.js?-->
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-left">
+            <button class="icon-btn menu-icon" aria-label="Open menu">&#9776;</button>
+        </div>
+        <a href="../index.html" class="logo">BRIDGE-IT</a>
+        <div class="header-right">
+            <button class="icon-btn cart-icon" aria-label="View cart">&#128722;</button>
+        </div>
+    </header>
+
+    <main class="product-main">
+        <section class="product-detail-card">
+            <div class="product-images">
+                <img id="main-product-image" src="../img_library/temp_strap.jpg" alt="Product Image" class="main-image">
+                <div class="thumbnail-gallery">
+                    <img src="../img_library/temp_strap.jpg" alt="Thumbnail 1" class="thumbnail active">
+                    <img src="../img_library/temp_strap.jpg" alt="Thumbnail 2" class="thumbnail">
+                    <img src="../img_library/temp_strap.jpg" alt="Thumbnail 3" class="thumbnail">
+                </div>
+            </div>
+            <div class="product-info-panel">
+                <h1 class="product-name-detail">Product Name</h1>
+                <p class="product-cat-detail">[Cat placeholder]</p>
+                <div class="price-section">
+                    <span class="current-price">$47.99</span>
+                </div>
+                <p class="product-description">
+                    This is a detailed description of the product. It highlights the features, benefits, and any other relevant information that would help the customer make an informed decision.
+                </p>
+                <div class="options-group">
+                    <label for="color-select">Color:</label>
+                    <select id="color-select" class="color-select">
+                        <option value="black">Black</option>
+                        <option value="blue">Blue</option>
+                        <option value="red">Red</option>
+                    </select>
+                </div>
+                <div class="options-group">
+                    <label for="quantity-input">Quantity</label>
+                    <input type="number" id="quantity-input" class="quantity-input" value="1" min="1">
+                </div>
+                <div class="action-buttons">
+                    <button id="add-to-cart-lg" class="btn add-to-cart-lg">ADD TO CART</button>
+                    <button id="buy-now-btn" class="btn buy-now-btn">BUY NOW</button>
+                </div>
+
+                <div class="shipping-info">
+                    <p>Free shipping over $50 | Returns within 30 days.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="side-menu-overlay" class="menu-overlay">
+        <div class="menu-content">
+            <button id="close-menu-btn" class="close-btn">&times;</button>
+            <nav class="menu-nav">
+                <a href="../index.html" class="menu-link">Home</a>
+                <a href="./about.html" class="menu-link">About</a>
+                <a href="./login.html" class="menu-link">Login</a>
+                <a href="./register.html" class="menu-link">Register</a>
+            </nav>
+        </div>
+    </div>
+    <nav class="bottom-nav">
+        <a href="../index.html" class="nav-item active" aria-label="Home">
+            <span class="nav-icon">&#8962;</span>
+        </a>
+        <a href="#" class="nav-item" aria-label="Search">
+            <span class="nav-icon">&#128269;</span>
+        </a>
+        <a href="#" class="nav-item" aria-label="Orders">
+            <span class="nav-icon">&#128196;</span>
+        </a>
+        <a href="#" class="nav-item" aria-label="Profile">
+            <span class="nav-icon">&#128100;</span>
+        </a>
+    </nav>
+    
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Bridge-IT. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
