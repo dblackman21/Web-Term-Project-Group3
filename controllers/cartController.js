@@ -1,40 +1,82 @@
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
+const { randomUUID } = require('crypto'); 
+/**
+ * Helper: Get or create session ID from cookies
+ */
+const getSessionId = (req, res) => {
+  let sessionId = req.cookies.guestSessionId;
+  
+  if (!sessionId) {
+    sessionId = randomUUID();
+    // Set cookie for 24 hours
+    res.cookie('guestSessionId', sessionId, {
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+      sameSite: 'lax'
+    });
+  }
+  
+  return sessionId;
+};
 
 /**
- * Get user's cart
+ * Helper: Get cart for authenticated user or guest session
  */
-exports.getCart = async (req, res) => {
-  try {
-    let cart = await Cart.findOne({ user: req.user.id }).populate('items.product');
-    
-    // Create cart if it doesn't exist
+const getOrCreateCart = async (req, res) => {
+  if (req.user) {
+    // Authenticated user - find by userId
+    let cart = await Cart.findOne({ userId: req.user.id }).populate('items.product');
     if (!cart) {
-      cart = await Cart.create({ user: req.user.id, items: [] });
+      cart = await Cart.create({ userId: req.user.id, items: [] });
+      await cart.populate('items.product');
     }
-    
-    return res.json({
-      success: true,
-      cart
-    });
-    
-  } catch (err) {
-    console.error('GET CART ERROR:', err);
-    return res.status(500).json({
-      success: false,
-      message: 'Internal server error'
-    });
+    return cart;
+  } else {
+    // Guest user - find by sessionId
+    const sessionId = getSessionId(req, res);
+    let cart = await Cart.findOne({ sessionId }).populate('items.product');
+    if (!cart) {
+      cart = await Cart.create({ sessionId, items: [] });
+      await cart.populate('items.product');
+    }
+    return cart;
   }
 };
 
 /**
- * Add item to cart
+ * Get user's cart (works for both authenticated and guest users)
+ */
+exports.getCart = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    const sessionId = req.cookies.guestSessionId;
+
+    const query = userId ? { userId } : sessionId ? { sessionId } : null;
+
+    // Ni user, ni sessionId → aucun panier
+    if (!query) {
+      return res.status(200).json(null);
+    }
+
+    const cart = await Cart.findOne(query).populate("items.product");
+    return res.json(cart);
+
+  } catch (error) {
+    console.error("GET CART ERROR", error);
+    res.status(500).json({ success: false });
+  }
+};
+/**
+ * Add item to cart (works for both authenticated and guest users)
  */
 exports.addToCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
     
-    if (!productId || quantity == null) {
+    // Validation
+    if (!productId || quantity === undefined || quantity === null) {
       return res.status(400).json({
         success: false,
         message: 'Product ID and quantity are required'
@@ -48,7 +90,7 @@ exports.addToCart = async (req, res) => {
       });
     }
     
-    // Check if product exists and is available
+    // Check product
     const product = await Product.findById(productId);
     
     if (!product) {
@@ -72,23 +114,18 @@ exports.addToCart = async (req, res) => {
       });
     }
     
-    // Get or create cart
-    let cart = await Cart.findOne({ user: req.user.id });
+    // Get or create cart (unified logic)
+    const cart = await getOrCreateCart(req, res);
     
-    if (!cart) {
-      cart = await Cart.create({ user: req.user.id, items: [] });
-    }
-    
-    // Add item to cart
+    // Add item
     await cart.addItem(productId, quantity, product.price);
-    
-    // Populate product details
     await cart.populate('items.product');
     
     return res.json({
       success: true,
       message: 'Item added to cart',
-      cart
+      cart,
+      isGuest: !req.user
     });
     
   } catch (err) {
@@ -121,23 +158,14 @@ exports.updateCartItem = async (req, res) => {
       });
     }
     
-    const cart = await Cart.findOne({ user: req.user.id });
-    
-    if (!cart) {
-      return res.status(404).json({
-        success: false,
-        message: 'Cart not found'
-      });
-    }
-    
-    // Check stock if increasing quantity
+    // Check stock if quantity > 0
     if (quantity > 0) {
       const product = await Product.findById(productId);
       
       if (!product) {
         return res.status(404).json({
           success: false,
-          message: 'Product not found'
+          message: 'Product not found in cart'
         });
       }
       
@@ -149,13 +177,18 @@ exports.updateCartItem = async (req, res) => {
       }
     }
     
+    // Get cart (unified logic)
+    const cart = await getOrCreateCart(req, res);
+    
+    // Update quantity
     await cart.updateQuantity(productId, quantity);
     await cart.populate('items.product');
     
     return res.json({
       success: true,
       message: 'Cart updated successfully',
-      cart
+      cart,
+      isGuest: !req.user
     });
     
   } catch (err) {
@@ -188,23 +221,28 @@ exports.removeFromCart = async (req, res) => {
         message: 'Product ID is required'
       });
     }
-    
-    const cart = await Cart.findOne({ user: req.user.id });
-    
+
+    const sessionId = req.cookies.guestSessionId;
+    const userId = req.user?._id;
+
+    const cart = await Cart.findOne(userId ? { userId } : { sessionId });
+
     if (!cart) {
-      return res.status(404).json({
-        success: false,
-        message: 'Cart not found'
-      });
+        return res.status(404).json({
+            success: false,
+            message: "Cart not found"
+        });
     }
     
+    // Remove item
     await cart.removeItem(productId);
     await cart.populate('items.product');
     
     return res.json({
       success: true,
       message: 'Item removed from cart',
-      cart
+      cart,
+      isGuest: !req.user
     });
     
   } catch (err) {
@@ -221,25 +259,107 @@ exports.removeFromCart = async (req, res) => {
  */
 exports.clearCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user.id });
+    // Get cart (unified logic)
+    const cart = await getOrCreateCart(req, res);
     
-    if (!cart) {
-      return res.status(404).json({
-        success: false,
-        message: 'Cart not found'
-      });
-    }
-    
+    // Clear cart
     await cart.clearCart();
     
     return res.json({
       success: true,
       message: 'Cart cleared successfully',
-      cart
+      cart,
+      isGuest: !req.user
     });
     
   } catch (err) {
     console.error('CLEAR CART ERROR:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+};
+
+/**
+ * Merge guest cart with user cart after login
+ * This is called automatically after successful login
+ */
+exports.mergeGuestCart = async (req, res) => {
+  try {
+    // Must be authenticated
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required'
+      });
+    }
+    
+    // Get guest session ID from cookie
+    const guestSessionId = req.cookies.guestSessionId;
+    
+    if (!guestSessionId) {
+      return res.json({
+        success: true,
+        message: 'No guest cart to merge'
+      });
+    }
+    
+    // Find guest cart
+    const guestCart = await Cart.findOne({ sessionId: guestSessionId });
+    
+    if (!guestCart || guestCart.items.length === 0) {
+      // Clear guest session cookie
+      res.clearCookie('guestSessionId');
+      return res.json({
+        success: true,
+        message: 'No guest cart to merge'
+      });
+    }
+    
+    // Find or create user cart
+    let userCart = await Cart.findOne({ userId: req.user.id });
+    
+    if (!userCart) {
+      // No existing user cart - just convert guest cart to user cart
+      await guestCart.convertToUserCart(req.user.id);
+      await guestCart.populate('items.product');
+      
+      // Clear guest session cookie
+      res.clearCookie('guestSessionId');
+      
+      return res.json({
+        success: true,
+        message: 'Guest cart converted to user cart',
+        cart: guestCart
+      });
+    }
+    
+    // Merge guest cart items into user cart
+    for (const guestItem of guestCart.items) {
+      await userCart.addItem(
+        guestItem.product,
+        guestItem.quantity,
+        guestItem.price
+      );
+    }
+    
+    // Delete guest cart
+    await Cart.deleteOne({ sessionId: guestSessionId });
+    
+    // Clear guest session cookie
+    res.clearCookie('guestSessionId');
+    
+    await userCart.populate('items.product');
+    
+    return res.json({
+      success: true,
+      message: 'Guest cart merged successfully',
+      cart: userCart
+    });
+    
+  } catch (err) {
+    console.error('MERGE CART ERROR:', err);
     return res.status(500).json({
       success: false,
       message: 'Internal server error'

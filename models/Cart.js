@@ -20,11 +20,13 @@ const cartItemSchema = new mongoose.Schema({
 }, { _id: false });
 
 const cartSchema = new mongoose.Schema({
-  user: {
+  // Either userId OR sessionId must be present
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-    unique: true
+    ref: 'User'
+  },
+  sessionId: {
+    type: String
   },
   items: [cartItemSchema],
   totalPrice: {
@@ -32,25 +34,61 @@ const cartSchema = new mongoose.Schema({
     default: 0,
     min: [0, 'Total price cannot be negative']
   },
+  // For guest carts: auto-delete after 24 hours
+  expiresAt: {
+    type: Date
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
   updatedAt: {
     type: Date,
     default: Date.now
   }
 });
 
+// Indexes for unique constraints (sparse allows null values)
+cartSchema.index({ userId: 1 }, { unique: true, sparse: true });
+cartSchema.index({ sessionId: 1 }, { unique: true, sparse: true });
+// TTL index for automatic deletion of guest carts
+cartSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+// Validation: Must have either userId or sessionId, but not both
+cartSchema.pre('validate', function() {
+  const hasUserId = !!this.userId;
+  const hasSessionId = !!this.sessionId;
+  
+  if (hasUserId && hasSessionId) {
+    this.invalidate('userId', 'Cart cannot have both userId and sessionId');
+  } else if (!hasUserId && !hasSessionId) {
+    this.invalidate('userId', 'Cart must have either userId or sessionId');
+  }
+});
+
 // Calculate total price before saving
-cartSchema.pre('save', async function() {
+cartSchema.pre('save', function() {
   this.totalPrice = this.items.reduce((total, item) => {
     return total + (item.price * item.quantity);
   }, 0);
   this.updatedAt = Date.now();
+  
+  // Set expiration for guest carts (24 hours from now)
+  if (this.sessionId && !this.userId) {
+    this.expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  } else {
+    // Remove expiration for user carts
+    this.expiresAt = undefined;
+  }
 });
 
 // Add item to cart or update quantity if already exists
 cartSchema.methods.addItem = async function(productId, quantity, price) {
-  const existingItem = this.items.find(
-    item => item.product.toString() === productId.toString()
-  );
+  const existingItem = this.items.find(item => {
+    // Handle both populated (object) and unpopulated (ObjectId) products
+    const itemProductId = item.product._id || item.product;
+    return itemProductId.toString() === productId.toString();
+  });
 
   if (existingItem) {
     existingItem.quantity += quantity;
@@ -63,17 +101,19 @@ cartSchema.methods.addItem = async function(productId, quantity, price) {
 
 // Remove item from cart
 cartSchema.methods.removeItem = async function(productId) {
-  this.items = this.items.filter(
-    item => item.product.toString() !== productId.toString()
-  );
+  this.items = this.items.filter(item => {
+    const itemProductId = item.product._id || item.product;
+    return itemProductId.toString() !== productId.toString();
+  });
   await this.save();
 };
 
 // Update item quantity
 cartSchema.methods.updateQuantity = async function(productId, quantity) {
-  const item = this.items.find(
-    item => item.product.toString() === productId.toString()
-  );
+  const item = this.items.find(item => {
+    const itemProductId = item.product._id || item.product;
+    return itemProductId.toString() === productId.toString();
+  });
 
   if (!item) {
     throw new Error('Item not found in cart');
@@ -90,6 +130,18 @@ cartSchema.methods.updateQuantity = async function(productId, quantity) {
 // Clear all items from cart
 cartSchema.methods.clearCart = async function() {
   this.items = [];
+  await this.save();
+};
+
+// Convert guest cart to user cart (called after login)
+cartSchema.methods.convertToUserCart = async function(userId) {
+  if (this.userId) {
+    throw new Error('Cart is already associated with a user');
+  }
+  
+  this.userId = userId;
+  this.sessionId = undefined;
+  this.expiresAt = undefined; // Remove expiration
   await this.save();
 };
 
