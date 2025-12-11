@@ -4,10 +4,16 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000; //added 3000 as a fallback
 const connectDB = require('./config/database');
+const cookieParser= require('cookie-parser');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser()); //Parse cookies for sessionId (guests without account)
+
+
+// Export app for testing
+module.exports = app;
 
 connectDB();
 
@@ -40,6 +46,10 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'API Bridge-IT working' });
 });
 
-app.listen(PORT, () => {
+
+// Only start server if not in test mode
+if (require.main === module) {
+  app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
-});
+  });
+}
