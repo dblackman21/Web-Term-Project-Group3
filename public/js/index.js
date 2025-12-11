@@ -1,11 +1,9 @@
-// public/app.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const loginBtn = document.getElementById("go-to-login");
   const registerBtn = document.getElementById("go-to-register");
   const sideMenuOverlay = document.getElementById("side-menu-overlay");
-  const menuIconBtn = document.getElementById("menu-icon-btn");
   const closeMenuBtn = document.getElementById("close-menu-btn");
+  const menuIconBtn = document.querySelector(".menu-icon");
 
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {

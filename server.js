@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = process.env.PORT; 
+const PORT = process.env.PORT || 3000; //added 3000 as a fallback
 const connectDB = require('./config/database');
 
 app.use(express.urlencoded({ extended: true }));
