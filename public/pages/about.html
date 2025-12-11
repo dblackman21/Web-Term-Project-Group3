@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bridge-IT - About Us</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Bridge-IT | About Us</title>
+    <link rel="stylesheet" href="../css/style.css"> 
+    <script src="../js/index.js" defer></script> 
 </head>
 <body>
     <header class="main-header">
@@ -16,41 +17,56 @@
             <button class="icon-btn cart-icon" aria-label="View cart">&#128722;</button>
         </div>
     </header>
-    
-    <!-- Removed Explore Collection Button
-    <nav class="category-nav">
-        <div class="category-list">
-            <button class="category-btn">Home</button>
-            <button class="category-btn">Whoop Straps</button>
-            <button class="category-btn">Fitbit Straps</button>
-            <button class="category-btn">Swimwear</button>
-            <button class="category-btn">Tops</button>
-            <button class="category-btn">Bottoms</button>
-            <button class="category-btn">Luxury</button>
-        </div>
-    </nav>
-    
--->
 
-    <main class="about-main-content">
-        <section class="hero-section">
-            <div class="hero-content">
-                <h2 class="hero-title">About Bridge-IT</h2>
-            </div>
+    <main class="product-main-content" style="padding-top: 20px;">
+        <section class="info-section">
+            <h2 style="color: var(--text-light); margin-bottom: 15px; font-size: 24px;">Our Goal</h2>
+            <p style="color: var(--text-medium); line-height: 1.6;">Bridge-IT is determined to be the best wearable fitness device that one could own! With multiple colors and various ways to wear, you can choose how to best bridge your everyday life and fitness</p>
         </section>
-        <section class="about-section">
-            <h3>Our Goal</h3>
-            <p>Bridge-IT is determined to be the best wearable fitness device that one could own! With multiple colors and various ways to wear, you can choose how to best bridge your everyday life and fitness.</p>
+        
+        <section class="info-section" style="margin-top: 30px;">
+            <h2 style="color: var(--text-light); margin-bottom: 15px; font-size: 24px;">Our Team</h2>
+            <p style="color: var(--text-medium); line-height: 1.6;">We are a dedicated team of fitness enthusiasts and tech lovers committed to creating innovative solutions that enhance your fitness journey.</p>
         </section>
-        <section class="about-section">
-            <h3>Our Team</h3>
-            <p>We are a dedicated team of fitness enthusiasts and tech lovers committed to creating innovative solutions that enhance your fitness journey.</p>
-        </section>
-        <section class="about-section">
-            <h3>Contact Us</h3>
-            <p>If you have any questions or would like to learn more about Bridge-IT, feel free to reach out to us at support@BridgeIT.com (dummy email).</p>
+        
+        <section class="info-section" style="margin-top: 30px;">
+            <h2 style="color: var(--text-light); margin-bottom: 15px; font-size: 24px;">Contact Us</h2>
+            <p style="color: var(--text-medium); line-height: 1.6;">If you have any questions or would like to learn more about Bridge-IT, feel free to reach out to us at support@BridgeIT.com (dummy email).</p>
         </section>
     </main>
+    
+    <div id="side-menu-overlay" class="menu-overlay">
+        <div class="menu-content">
+            <button id="close-menu-btn" class="close-btn">&times;</button>
+            <nav class="menu-nav">
+                <a href="../index.html" class="menu-link">Home</a>
+                <a href="./about.html" class="menu-link">About</a>
+                <a href="./login.html" class="menu-link">Login</a>
+                <a href="./register.html" class="menu-link">Register</a>
+            </nav>
+        </div>
+    </div>
+    
+    <nav class="bottom-nav">
+        <a href="../index.html" class="nav-item" aria-label="Home">
+            <span class="nav-icon">&#8962;</span>
+        </a>
+        <a href="#" class="nav-item" aria-label="Search">
+            <span class="nav-icon">&#128269;</span>
+        </a>
+        <a href="#" class="nav-item" aria-label="Orders">
+            <span class="nav-icon">&#128196;</span>
+        </a>
+        <a href="#" class="nav-item active" aria-label="Profile">
+            <span class="nav-icon">&#128100;</span>
+        </a>
+    </nav>
+    
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Bridge-IT. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 <footer class="main-footer">
     <div class="footer-content">
