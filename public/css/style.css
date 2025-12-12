@@ -520,18 +520,7 @@ body {
 
 /*bottom nav bar (Instagram-like)*/
 .bottom-nav {
-    display: none;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    background-color: var(--bg-medium);
-    border-top: 1px solid #333;
-    padding: 8px 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-around;
-    align-items:center;
+    display: none; /* Hidden by default, shown on mobile */
 }
 .nav-item {
     display: flex;
@@ -669,6 +658,17 @@ font-weight: 550;
     }
     .bottom-nav {
         display: flex;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background-color: var(--bg-medium);
+        border-top: 1px solid #333;
+        padding: 8px 0;
+        z-index: 100;
+        display: flex;
+        justify-content: space-around;
+        align-items:center;
     }
     .menu-content{
         max-width: 100%;
