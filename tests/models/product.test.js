@@ -9,7 +9,10 @@ let testProductId;
 
 beforeAll(async () => {
   // Connect to test database
-  await mongoose.connect(process.env.MONGODB_TEST_URI || process.env.MONGODB_URI);
+  if (mongoose.connection.readyState !== 0){
+    await mongoose.connection.close();
+  } 
+  await mongoose.connect(process.env.MONGODB_TEST_URI);
   
   // Clear collections
   await Product.deleteMany({});
