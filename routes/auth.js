@@ -9,6 +9,7 @@ router.post("/login", userController.loginUser);
 
 // Private routes, protected by middleware
 router.get("/profile", authMiddleware, userController.getProfile);
+router.put("/profile", authMiddleware, userController.updateProfile);
 
 module.exports = router;
 

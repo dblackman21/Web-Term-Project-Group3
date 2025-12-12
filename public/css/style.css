@@ -36,6 +36,10 @@ body {
     position: sticky;
     top: 0;
 }
+.header-right {
+    display: flex;
+    gap: 10px
+}
 .logo {
     text-decoration: none;
     color: var(--text-light);
