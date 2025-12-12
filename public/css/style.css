@@ -104,7 +104,7 @@ body {
     white-space: nowrap;
     -webkit-overflow-scrolling: touch; /*for mobile*/
     position: sticky;
-    top: 62px;
+    top: 60px;
     z-index: 99;
 }
 .category-list {
@@ -351,7 +351,7 @@ body {
     width: 100%;
 }
 
-.about-section {
+.info-section {
     background-color: var(--bg-medium);
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -365,6 +365,7 @@ body {
     gap: 8px;
 }
 
+/* Hero section, got removed from about
 .about-main-content .hero-section {
     width: 100%;
     max-width: none;
@@ -382,8 +383,9 @@ body {
     text-align: center;
     width: 100%;
 }
+*/
 
-.about-section h3 {
+.info-section h3 {
     font-size: 22px;
     font-weight: 700;
     color: var(--highlight-green);
@@ -391,7 +393,7 @@ body {
     width: 100%;
 }
 
-.about-section p {
+.info-section p {
     font-size: 16px;
     color: var(--text-medium);
     line-height: 1.7;
@@ -715,6 +717,17 @@ font-weight: 550;
     }
     .bottom-nav {
         display: flex;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background-color: var(--bg-medium);
+        border-top: 1px solid #333;
+        padding: 8px 0;
+        z-index: 100;
+        display: flex;
+        justify-content: space-around;
+        align-items:center;
     }
     .menu-content{
         max-width: 100%;
