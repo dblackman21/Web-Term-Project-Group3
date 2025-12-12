@@ -190,16 +190,72 @@ exports.loginUser = async (req, res) => {
  * Logout user
  */
 exports.logoutUser = (req, res) => {
-  // Note: req.session.destroy() won't work anymore since we removed express-session
-  // JWT is stateless, so logout is handled client-side by removing the token
-  
-  // Optional: Clear any remaining cookies
   res.clearCookie('guestSessionId');
-  
   res.json({ 
     success: true,
     message: "Logged out successfully" 
   });
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { firstname, lastname, email } = req.body;
+
+    if (!firstname || !lastname || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "Firstname, lastname and email are required"
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    if (email !== user.email) {
+      const existing = await User.findOne({ email });
+      if (existing && existing._id.toString() !== userId.toString()) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is already registered"
+        });
+      }
+      user.email = email.toLowerCase();
+    }
+
+    user.firstname = firstname;
+    user.lastname = lastname;
+
+    await user.save();
+
+    //remove password from JSON
+    const safeUser = user.toJSON();
+
+    return res.json({
+      success: true,
+      message: "Profile updated successfully",
+      user: safeUser
+    });
+  } catch (err) {
+    console.error("UPDATE PROFILE ERROR:", err);
+
+    if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is already registered"
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
 };
 
 /**

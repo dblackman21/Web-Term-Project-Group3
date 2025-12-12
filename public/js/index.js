@@ -8,18 +8,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const exploreBtn = document.getElementById("explore-collection-btn");
   const productList = document.getElementById("product-list");
   const HEADER_OFFESET = 100;
+  const userIconBtn = document.querySelector(".user-icon");
 
-  if (loginBtn) {
-    loginBtn.addEventListener("click", () => {
-      window.location.href = "./pages/login.html";
-    });
-  }
+    if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+            window.location.href = "./pages/login.html";
+        });
+    }
 
-  if (registerBtn) {
-    registerBtn.addEventListener("click", () => {
-      window.location.href = "./pages/register.html";
-    });
-  }
+    if (registerBtn) {
+        registerBtn.addEventListener("click", () => {
+            window.location.href = "./pages/register.html";
+        });
+    }
+    // User icon click handler
+    if (userIconBtn) {
+        userIconBtn.addEventListener("click", () => {
+            const authToken = localStorage.getItem('authToken');
+            if (authToken) {
+                window.location.href = "./pages/profile.html";  // Connecté → Profile
+            } else {
+                window.location.href = "./pages/login.html";     // Guest → Login
+            }
+        });
+    }
 
   if (menuIconBtn) {
     menuIconBtn.addEventListener("click", () => {

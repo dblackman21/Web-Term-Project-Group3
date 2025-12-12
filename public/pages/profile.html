@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridge-IT - Profile</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <script src="../js/profile.js" defer></script>
+    <script src="../js/index.js" defer></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-left">
+            <button class="icon-btn menu-icon" aria-label="Open menu">&#9776;</button>
+        </div>
+        <a href="../index.html" class="logo">BRIDGE-IT</a>
+        <div class="header-right">
+            <button class="icon-btn cart-icon" aria-label="View cart">&#128722;</button>
+        </div>
+    </header>
+
+    <main class="profile-main-content">
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-container">
+            <div class="spinner"></div>
+            <p>Loading your profile...</p>
+        </div>
+
+        <!-- Profile Content -->
+        <div id="profile-content" class="profile-container" style="display: none;">
+            <!-- User Header Card -->
+            <section class="profile-header-card">
+                <div class="profile-avatar-section">
+                    <div class="avatar-circle">
+                        <span id="avatar-initials">JD</span>
+                    </div>
+                    <button class="avatar-edit-btn" title="Change avatar">
+                        <span>&#9998;</span>
+                    </button>
+                </div>
+                <div class="profile-header-info">
+                    <h1 id="user-fullname">John Doe</h1>
+                    <p id="user-email" class="user-email">john.doe@example.com</p>
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Member since</span>
+                            <span id="member-since" class="stat-value">Jan 2024</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-label">Orders</span>
+                            <span id="order-count" class="stat-value">0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Sections Grid -->
+            <div class="profile-sections-grid">
+                <!-- Account Information -->
+                <section class="profile-section account-info-section">
+                    <div class="section-header">
+                        <h2>Account Information</h2>
+                        <button id="edit-info-btn" class="section-action-btn">Edit</button>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">First Name</span>
+                            <span id="display-firstname" class="info-value">John</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Name</span>
+                            <span id="display-lastname" class="info-value">Doe</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Email</span>
+                            <span id="display-email" class="info-value">john.doe@example.com</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Login</span>
+                            <span id="display-lastlogin" class="info-value">Just now</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Actions -->
+                <section class="profile-section quick-actions-section">
+                    <div class="section-header">
+                        <h2>Quick Actions</h2>
+                    </div>
+                    <div class="quick-actions-grid">
+                        <a href="./cart.html" class="action-card">
+                            <span class="action-icon">&#128722;</span>
+                            <span class="action-label">View Cart</span>
+                        </a>
+                        <a href="../index.html" class="action-card">
+                            <span class="action-icon">&#128269;</span>
+                            <span class="action-label">Browse Products</span>
+                        </a>
+                        <a href="./about.html" class="action-card">
+                            <span class="action-icon">&#128712;</span>
+                            <span class="action-label">About Us</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Danger Zone -->
+                <section class="profile-section danger-section">
+                    <div class="section-header">
+                        <h2>Danger Zone</h2>
+                    </div>
+                    <button id="logout-btn" class="danger-btn">
+                        <span>Logout</span>
+                    </button>
+                </section>
+            </div>
+        </div>
+
+        <!-- Not Logged In State -->
+        <div id="not-logged-in" class="not-logged-container" style="display: none;">
+            <div class="not-logged-content">
+                <div class="not-logged-icon">&#128274;</div>
+                <h2>Access Restricted</h2>
+                <p>Please log in to view your profile</p>
+                <div class="not-logged-actions">
+                    <a href="./login.html" class="btn-primary">Log In</a>
+                    <a href="./register.html" class="btn-secondary">Create Account</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <form id="edit-profile-form" class="modal-form">
+                <div class="form-group">
+                    <label for="edit-firstname">First Name</label>
+                    <input type="text" id="edit-firstname" name="firstname" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-lastname">Last Name</label>
+                    <input type="text" id="edit-lastname" name="lastname" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-email">Email</label>
+                    <input type="email" id="edit-email" name="email" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  
+    <!-- Side Menu -->
+    <div id="side-menu-overlay" class="menu-overlay">
+        <div class="menu-content">
+            <button id="close-menu-btn" class="close-btn">&times;</button>
+            <nav class="menu-nav">
+                <a href="../index.html" class="menu-link">Home</a>
+                <a href="./about.html" class="menu-link">About</a>
+                <a href="./profile.html" class="menu-link">Profile</a>
+                <a href="./login.html" class="menu-link">Login</a>
+                <a href="./register.html" class="menu-link">Register</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="../index.html" class="nav-item" aria-label="Home">
+            <span class="nav-icon">&#8962;</span>
+        </a>
+        <a href="#" class="nav-item" aria-label="Search">
+            <span class="nav-icon">&#128269;</span>
+        </a>
+        <a href="./cart.html" class="nav-item" aria-label="Cart">
+            <span class="nav-icon">&#128722;</span>
+        </a>
+        <a href="./profile.html" class="nav-item active" aria-label="Profile">
+            <span class="nav-icon">&#128100;</span>
+        </a>
+    </nav>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Bridge-IT. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
