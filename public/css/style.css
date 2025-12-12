@@ -65,7 +65,7 @@ body {
     white-space: nowrap;
     -webkit-overflow-scrolling: touch; /*for mobile*/
     position: sticky;
-    top: 62px;
+    top: 60px;
     z-index: 99;
 }
 .category-list {
