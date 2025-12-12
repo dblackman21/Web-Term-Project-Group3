@@ -312,7 +312,7 @@ body {
     width: 100%;
 }
 
-.about-section {
+.info-section {
     background-color: var(--bg-medium);
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -326,6 +326,7 @@ body {
     gap: 8px;
 }
 
+/* Hero section, got removed from about
 .about-main-content .hero-section {
     width: 100%;
     max-width: none;
@@ -343,8 +344,9 @@ body {
     text-align: center;
     width: 100%;
 }
+*/
 
-.about-section h3 {
+.info-section h3 {
     font-size: 22px;
     font-weight: 700;
     color: var(--highlight-green);
@@ -352,7 +354,7 @@ body {
     width: 100%;
 }
 
-.about-section p {
+.info-section p {
     font-size: 16px;
     color: var(--text-medium);
     line-height: 1.7;
