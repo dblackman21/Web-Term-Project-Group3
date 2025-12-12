@@ -12,7 +12,10 @@
 <body>
     <header class="main-header">
         <div class="header-left">
-            <button class="icon-btn menu-icon" aria-label="Open menu">&#9776;</button> </div>
+            <button class="icon-btn menu-icon" aria-label="Open menu">&#9776;</button> 
+            <input type="text" id="header-search-input" class="header-search-input" placeholder="Search">
+        </div>
+            
         <a href="index.html" class="logo">BRIDGE-IT</a>
         <div class="header-right">
             <button class="icon-btn user-icon" aria-label="User profile">&#128100;</button>
@@ -42,13 +45,13 @@
                     <div class="line"></div>
                     <div class="line"></div>
                 </div>
-                <button class="btn explore-btn">
+                <button class="btn explore-btn" id="explore-collection-btn">
                     Explore Collection
                 </button>
             </div>
         </section>
         
-        <section class="product-list">
+        <section class="product-list" id="product-list">
             <!-- Product items will be dynamically inserted here -->
             <div class="product-card"> <!--Product 1-->
                 <div class="product-image-container">
@@ -236,6 +239,7 @@
     <nav class="bottom-nav">
         <a href="#" class="nav-item active" aria-label="Home">
             <span class="nav-icon">&#8962;</span>
+        </a>
         <a href="#" class="nav-item" aria-label="Search">
             <span class="nav-icon">&#128269;</span>
         </a>
