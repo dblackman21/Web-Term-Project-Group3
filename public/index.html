@@ -17,10 +17,15 @@
         </div>
             
         <a href="index.html" class="logo">BRIDGE-IT</a>
+
         <div class="header-right">
             <button class="icon-btn user-icon" aria-label="User profile">&#128100;</button>
-            <button class="icon-btn cart-icon" aria-label="View cart">&#128722;</button> </div>
+            <button class="icon-btn cart-icon" id="cart-icon-btn" aria-label="View cart">&#128722;
+                <span id="cart-count-badge" style="display:none;">0</span>
+            </button> 
+        </div>
     </header>
+
     <nav class="category-nav">
         <div class="category-list">
             <button class="category-btn active">All Products</button>
@@ -32,6 +37,7 @@
         </div>
     </nav>
 
+    <!--UNIQUE TO HOME PAGE-->
     <main class="product-main-content">
         <section class="hero-section">
             <div class="hero-content">
@@ -53,7 +59,9 @@
         
         <section class="product-list" id="product-list">
             <!-- Product items will be dynamically inserted here -->
-            <div class="product-card"> <!--Product 1-->
+             
+            <!--Product 1-->
+            <div class="product-card" data-product-id="whoop-sol-1" data-product-name="Whoop Sol" data-product-price="34.99"> 
                 <div class="product-image-container">
                     <span class="product-category">Whoop</span>
                     <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
@@ -64,177 +72,61 @@
                     <p class="product-variants">Straps</p>
                     <div class="product-price-row">
                         <span class="product-price">$34.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
+                        <button class="add-to-cart-btn" data-product-id="whoop-sol-1" Aria-label="Add to cart">&#43;</button>
                     </div>
                 </div>
             </div>
-             <div class="product-card"> <!--Product 1-->
+            <!--Product 2-->
+            <div class="product-card" data-product-id="fitbit-sol-1" data-product-name="Fitbit Sol" data-product-price="32.99"> 
                 <div class="product-image-container">
-                    <span class="product-category">Category here</span>
+                    <span class="product-category">Fitbit</span>
                     <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
                     <button class="quick-view-btn">Quick view</button>
                 </div>
                 <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
+                    <h3 class="product-name">Fitbit Sol</h3>
                     <p class="product-variants">Straps</p>
                     <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
+                        <span class="product-price">$32.99</span>
+                        <button class="add-to-cart-btn" data-product-id="fitbit-sol-1" Aria-label="Add to cart">&#43;</button>
                     </div>
                 </div>
             </div>
-             <div class="product-card"> <!--Product 1-->
+            <!--Product 3-->
+            <div class="product-card" data-product-id="whoop-aqua-1" data-product-name="Whoop Aqua" data-product-price="44.99"> 
                 <div class="product-image-container">
-                    <span class="product-category">Category here</span>
+                    <span class="product-category">Swimwear</span>
                     <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
                     <button class="quick-view-btn">Quick view</button>
                 </div>
                 <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
+                    <h3 class="product-name">Whoop Aqua</h3>
+                    <p class="product-variants">Swimwear</p>
                     <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
+                        <span class="product-price">$44.99</span>
+                        <button class="add-to-cart-btn" data-product-id="whoop-aqua-1" Aria-label="Add to cart">&#43;</button>
                     </div>
                 </div>
             </div>
-             <div class="product-card"> <!--Product 1-->
+            <!--Product 4-->
+            <div class="product-card" data-product-id="fitbit-aqua-1" data-product-name="Fitbit Aqua" data-product-price="44.99"> 
                 <div class="product-image-container">
-                    <span class="product-category">Category here</span>
+                    <span class="product-category">Swimwear</span>
                     <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
                     <button class="quick-view-btn">Quick view</button>
                 </div>
                 <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
+                    <h3 class="product-name">Fitbit Aqua</h3>
                     <p class="product-variants">Straps</p>
                     <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
-                    </div>
-                </div>
-            </div>
-             <div class="product-card"> <!--Product 1-->
-                <div class="product-image-container">
-                    <span class="product-category">Category here</span>
-                    <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
-                    <button class="quick-view-btn">Quick view</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
-                    <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
-                    </div>
-                </div>
-            </div>
-             <div class="product-card"> <!--Product 1-->
-                <div class="product-image-container">
-                    <span class="product-category">Category here</span>
-                    <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
-                    <button class="quick-view-btn">Quick view</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
-                    <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
-                    </div>
-                </div>
-            </div>
-             <div class="product-card"> <!--Product 1-->
-                <div class="product-image-container">
-                    <span class="product-category">Category here</span>
-                    <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
-                    <button class="quick-view-btn">Quick view</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
-                    <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
-                    </div>
-                </div>
-            </div>
-             <div class="product-card"> <!--Product 1-->
-                <div class="product-image-container">
-                    <span class="product-category">Category here</span>
-                    <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
-                    <button class="quick-view-btn">Quick view</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
-                    <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
-                    </div>
-                </div>
-            </div>
-             <div class="product-card"> <!--Product 1-->
-                <div class="product-image-container">
-                    <span class="product-category">Category here</span>
-                    <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
-                    <button class="quick-view-btn">Quick view</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
-                    <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
-                    </div>
-                </div>
-            </div>
-             <div class="product-card"> <!--Product 1-->
-                <div class="product-image-container">
-                    <span class="product-category">Category here</span>
-                    <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
-                    <button class="quick-view-btn">Quick view</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
-                    <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
-                    </div>
-                </div>
-            </div>
-             <div class="product-card"> <!--Product 1-->
-                <div class="product-image-container">
-                    <span class="product-category">Category here</span>
-                    <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
-                    <button class="quick-view-btn">Quick view</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
-                    <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
-                    </div>
-                </div>
-            </div>
-             <div class="product-card"> <!--Product 1-->
-                <div class="product-image-container">
-                    <span class="product-category">Category here</span>
-                    <img src="./img_library/temp_strap.jpg" alt="strap 1" class="product-image">
-                    <button class="quick-view-btn">Quick view</button>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Sport Strap</h3>
-                    <p class="product-variants">Straps</p>
-                    <div class="product-price-row">
-                        <span class="product-price">$29.99</span>
-                        <button class="add-to-cart-btn" Aria-label="Add to cart">&#43;</button>
+                        <span class="product-price">$44.99</span>
+                        <button class="add-to-cart-btn" data-product-id="fitbit-aqua-1" Aria-label="Add to cart">&#43;</button>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+    <!--END HOME PAGE MAIN CONTENT-->
     
     <nav class="bottom-nav">
         <a href="#" class="nav-item active" aria-label="Home">
