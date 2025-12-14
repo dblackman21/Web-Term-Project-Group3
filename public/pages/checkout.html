@@ -5,44 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bridge-IT - Checkout</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/index.js" defer></script>
 </head>
-<body>
+<body class="checkout-page">
     <header class="main-header">
         <div class="header-left">
             <button class="icon-btn menu-icon" aria-label="Open menu">&#9776;</button>
         </div>
         <a href="../index.html" class="logo">BRIDGE-IT</a>
         <div class="header-right">
-            <button class="icon-btn cart-icon" aria-label="View cart">&#128722;</button>
+            <button class="icon-btn user-icon" aria-label="User profile">&#128100;</button>
+            <button class="icon-btn cart-icon" id="cart-icon-btn" aria-label="View cart">&#128722;
+                <span id="cart-count-badge" style="display:none;">0</span>
+            </button>
         </div>
     </header>
 
     <main class="confirmation-main-content">
         <section class="confirmation-section">
-            <h2 class="confirmation-title">Thank You for Your Order!</h2>
-            <p>Your order has been successfully placed. Here are the details:</p>
+            <h2 class="confirmation-title">Order Confirmation</h2>
+            <p id="checkout-message">Review your order before confirming.</p>
+            
             <div class="order-details">
                 <h3>Order Summary</h3>
-                <div class="order-item">
-                    <span class="order-item-name">Sport Strap - Black</span>
-                    <span class="order-item-qty">Qty: 1</span>
-                    <span class="order-item-price">$29.99</span>
+                <div id="order-items-container">
                 </div>
+                
                 <div class="order-summary-total">
                     <strong>Total Amount:</strong>
-                    <span class="order-total-price">$29.99</span>
+                    <span class="order-total-price" id="order-total-price">$0.00</span>
                 </div>
             </div>
-            <p>Your order will be shipped to the address provided during checkout.</p>
-            <p>If you have any questions, feel free to contact our support team.</p>
-            <a href="../index.html" class="btn explore-btn" style="width:100%;text-align:center;">Continue Shopping</a>
+            
+            <p id="shipping-info">Your order will be shipped to the address provided during checkout.</p>
+            
+            <button id="confirm-order-btn" class="btn explore-btn" style="width:100%;text-align:center;">
+                Confirm Order
+            </button>
+            
+            <a href="../index.html" id="continue-shopping-btn" class="btn explore-btn" style="width:100%;text-align:center;display:none;">
+                Continue Shopping
+            </a>
         </section>
     </main>
-</body>
-<footer class="main-footer">
-    <div class="footer-content">
-        <p>&copy; 2024 Bridge-IT. All rights reserved.</p>
+
+    <div id="side-menu-overlay" class="menu-overlay">
+        <div class="menu-content">
+            <button id="close-menu-btn" class="close-btn">&times;</button>
+            <nav class="menu-nav">
+                <a href="../index.html" class="menu-link">Home</a>
+                <a href="about.html" class="menu-link">About</a>
+                <a href="login.html" class="menu-link">Login</a>
+                <a href="register.html" class="menu-link">Register</a>
+            </nav>
+        </div>
     </div>
-</footer>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Bridge-IT. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/checkout.js"></script>
+    <script src="../js/index.js" defer></script>
+</body>
 </html>

@@ -23,6 +23,29 @@ const productSchema = new mongoose.Schema({
     min: [0, 'Stock cannot be negative'],
     default: 0
   },
+  images: {
+    type: [String], // Array de URLs ou chemins d'images
+    default: ['./img_library/temp_strap.jpg'], // Image par défaut
+    validate: {
+      validator: function(arr) {
+        return arr.length > 0; // Au moins une image
+      },
+      message: 'Product must have at least one image'
+    }
+  },
+  mainImage: {
+    type: String,
+    default: function() {
+      return this.images && this.images.length > 0 
+        ? this.images[0] 
+        : './img_library/temp_strap.jpg';
+    }
+  },
+  category: {
+    type: String,
+    enum: ['Whoop', 'Fitbit', 'Swimwear', 'Tops', 'Bottoms', 'Other'],
+    default: 'Other'
+  },
   rating: {
     average: {
       type: Number,
@@ -53,6 +76,10 @@ const productSchema = new mongoose.Schema({
 // Update timestamp before saving
 productSchema.pre('save', async function() {
   this.updatedAt = Date.now();
+  
+  if (this.images && this.images.length > 0) {
+    this.mainImage = this.images[0];
+  }
 });
 
 // Check if product is available for purchase
@@ -79,6 +106,19 @@ productSchema.methods.increaseStock = async function(quantity) {
     this.isAvailable = true;
   }
   await this.save();
+};
+
+productSchema.methods.addImage = function(imageUrl) {
+  if (!this.images.includes(imageUrl)) {
+    this.images.push(imageUrl);
+  }
+};
+
+productSchema.methods.removeImage = function(imageUrl) {
+  this.images = this.images.filter(img => img !== imageUrl);
+  if (this.images.length === 0) {
+    this.images = ['./img_library/temp_strap.jpg'];
+  }
 };
 
 module.exports = mongoose.model('Product', productSchema);

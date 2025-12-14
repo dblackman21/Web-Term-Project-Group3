@@ -82,18 +82,32 @@ cartSchema.pre('save', function() {
   }
 });
 
-// Add item to cart or update quantity if already exists
 cartSchema.methods.addItem = async function(productId, quantity, price) {
+  const productIdStr = productId.toString();
+  
+  // Chercher si le produit existe déjà dans le panier
   const existingItem = this.items.find(item => {
+    if (!item.product) {
+      console.warn('Warning: Cart item has null product reference');
+      return false;
+    }
+    
     // Handle both populated (object) and unpopulated (ObjectId) products
     const itemProductId = item.product._id || item.product;
-    return itemProductId.toString() === productId.toString();
+    return itemProductId.toString() === productIdStr;
   });
 
   if (existingItem) {
+    // Produit déjà dans le panier : augmenter la quantité
     existingItem.quantity += quantity;
+    existingItem.price = price; // Mettre à jour le prix au cas où il aurait changé
   } else {
-    this.items.push({ product: productId, quantity, price });
+    // Nouveau produit : l'ajouter au panier
+    this.items.push({ 
+      product: productId, 
+      quantity, 
+      price 
+    });
   }
 
   await this.save();
@@ -101,18 +115,31 @@ cartSchema.methods.addItem = async function(productId, quantity, price) {
 
 // Remove item from cart
 cartSchema.methods.removeItem = async function(productId) {
+  const productIdStr = productId.toString();
+  
   this.items = this.items.filter(item => {
+    if (!item.product) {
+      return false; // Supprimer les items avec produit null
+    }
+    
     const itemProductId = item.product._id || item.product;
-    return itemProductId.toString() !== productId.toString();
+    return itemProductId.toString() !== productIdStr;
   });
+  
   await this.save();
 };
 
 // Update item quantity
 cartSchema.methods.updateQuantity = async function(productId, quantity) {
+  const productIdStr = productId.toString();
+  
   const item = this.items.find(item => {
+    if (!item.product) {
+      return false;
+    }
+    
     const itemProductId = item.product._id || item.product;
-    return itemProductId.toString() === productId.toString();
+    return itemProductId.toString() === productIdStr;
   });
 
   if (!item) {
