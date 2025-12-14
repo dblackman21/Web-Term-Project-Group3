@@ -24,11 +24,11 @@ const productSchema = new mongoose.Schema({
     default: 0
   },
   images: {
-    type: [String], // Array de URLs ou chemins d'images
-    default: ['./img_library/temp_strap.jpg'], // Image par défaut
+    type: [String],
+    default: ['./img_library/temp_strap.jpg'],
     validate: {
       validator: function(arr) {
-        return arr.length > 0; // Au moins une image
+        return arr.length > 0;
       },
       message: 'Product must have at least one image'
     }
