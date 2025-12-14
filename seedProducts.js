@@ -17,7 +17,6 @@ mongoose.connect(process.env.MONGODB_URI)
   process.exit(1);
 });
 
-// Produits à créer (basés sur ton index.html)
 const products = [
   {
     name: 'Whoop Sol',
@@ -25,7 +24,7 @@ const products = [
     price: 34.99,
     stock: 50,
     category: 'Whoop',
-    images: ['./img_library/temp_strap.jpg'], // Tu peux ajouter plusieurs images ici
+    images: ['./img_library/temp_strap.jpg', './img_library/temp_strap.jpg'],
     isAvailable: true
   },
   {
@@ -44,6 +43,15 @@ const products = [
     stock: 30,
     category: 'Swimwear',
     images: ['./img_library/temp_strap.jpg'],
+    isAvailable: true
+  },
+  {
+    name: 'Fitbit Black Graphite',
+    description: 'Fitbit color : Black Graphite',
+    price: 64.99,
+    stock: 35,
+    category: 'Fitbit',
+    images: ['./img_library/fitbit/blackgraphite.jpg'],
     isAvailable: true
   },
   {
