@@ -45,14 +45,16 @@ async function loadProductDetails() {
 }
 
 /**
- * Convert image path to work from product detail page  // can remove later if image paths are changed to be absolute in DB
+ * Convert image path to work from product detail page
+ * (Only needed if path starts with ./ - absolute paths work directly)
  */
 function correctImagePath(imagePath) {
   // If path starts with ./, replace it with ../
   if (imagePath && imagePath.startsWith('./')) {
     return imagePath.replace('./', '../');
   }
-  return imagePath || '../img_library/temp_strap.jpg';
+  // If path starts with /, it's absolute and works from any page
+  return imagePath || '/img_library/temp_strap.jpg';
 }
 
 /**
@@ -88,6 +90,9 @@ function populateProductPage(product) {
   document.querySelector('.current-price').textContent = formatPrice(product.price);
   document.querySelector('.product-description').textContent = product.description;
 
+  // Update color selector with variants if they exist
+  populateColorSelector(product);
+
   // Update availability
   const isAvailable = product.isAvailable && product.stock > 0;
   const addToCartBtn = document.getElementById('add-to-cart-lg');
@@ -105,24 +110,76 @@ function populateProductPage(product) {
 }
 
 /**
+ * Populate the color selector with product variants
+ */
+function populateColorSelector(product) {
+  const colorSelect = document.getElementById('color-select');
+  
+  if (!colorSelect) {
+    console.warn('Color selector not found');
+    return;
+  }
+
+  // If product has variants, populate dropdown
+  if (product.variants && product.variants.length > 0) {
+    // Clear existing options
+    colorSelect.innerHTML = '';
+    
+    // Add variant options
+    product.variants.forEach((variant, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = variant.color;
+      option.dataset.image = variant.image;
+      colorSelect.appendChild(option);
+    });
+
+    // Store product for later reference when adding to cart
+    colorSelect.dataset.productVariants = JSON.stringify(product.variants);
+    
+    // Add event listener to update image when color changes
+    colorSelect.addEventListener('change', () => {
+      const selectedIndex = parseInt(colorSelect.value);
+      const selectedVariant = product.variants[selectedIndex];
+      
+      if (selectedVariant && selectedVariant.image) {
+        // Update main image
+        const mainImage = document.getElementById('main-product-image');
+        if (mainImage) {
+          mainImage.src = selectedVariant.image;
+          mainImage.alt = selectedVariant.color;
+        }
+      }
+    });
+  } else {
+    // If no variants, disable the color selector
+    colorSelect.disabled = true;
+    colorSelect.innerHTML = '<option>No color options available</option>';
+  }
+}
+
+/**
  * Attach event listeners for product interactions
  */
 function attachEventListeners(product) {
   const addToCartBtn = document.getElementById('add-to-cart-lg');
   const buyNowBtn = document.getElementById('buy-now-btn');
   const quantityInput = document.getElementById('quantity-input');
+  const colorSelect = document.getElementById('color-select');
 
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', () => {
       const quantity = parseInt(quantityInput?.value || 1);
-      addToCartFromDetail(product._id, quantity);
+      const selectedColor = colorSelect ? colorSelect.options[colorSelect.selectedIndex].text : null;
+      addToCartFromDetail(product._id, quantity, false, selectedColor);
     });
   }
 
   if (buyNowBtn) {
     buyNowBtn.addEventListener('click', () => {
       const quantity = parseInt(quantityInput?.value || 1);
-      addToCartFromDetail(product._id, quantity, true); // true = redirect to checkout
+      const selectedColor = colorSelect ? colorSelect.options[colorSelect.selectedIndex].text : null;
+      addToCartFromDetail(product._id, quantity, true, selectedColor); // true = redirect to checkout
     });
   }
 }
@@ -130,13 +187,20 @@ function attachEventListeners(product) {
 /**
  * Add product to cart
  */
-async function addToCartFromDetail(productId, quantity = 1, redirectToCheckout = false) {
+async function addToCartFromDetail(productId, quantity = 1, redirectToCheckout = false, selectedColor = null) {
   try {
+    const body = { productId, quantity };
+    
+    // Include selected color/variant if available
+    if (selectedColor) {
+      body.selectedColor = selectedColor;
+    }
+
     const response = await fetch(`${CART_API_URL}/add`, {
       method: 'POST',
       headers: getAuthHeaders(),
       credentials: 'include',
-      body: JSON.stringify({ productId, quantity })
+      body: JSON.stringify(body)
     });
 
     const data = await response.json();

@@ -24,8 +24,9 @@ const products = [
     price: 34.99,
     stock: 50,
     category: 'Whoop',
-    images: ['./img_library/temp_strap.jpg', './img_library/temp_strap.jpg'],
-    isAvailable: true
+    images: ['/img_library/temp_strap.jpg', '/img_library/temp_strap.jpg'],
+    isAvailable: true,
+    variants: []
   },
   {
     name: 'Fitbit Sol',
@@ -33,17 +34,23 @@ const products = [
     price: 32.99,
     stock: 45,
     category: 'Fitbit',
-    images: ['./img_library/temp_strap.jpg'],
-    isAvailable: true
+    images: ['/img_library/temp_strap.jpg'],
+    isAvailable: true,
+    variants: []
   },
   {
     name: 'Whoop Aqua',
     description: 'Water-resistant Whoop strap ideal for swimming and water sports. Maximum durability.',
     price: 44.99,
-    stock: 30,
+    stock: 90,
     category: 'Swimwear',
-    images: ['./img_library/temp_strap.jpg'],
-    isAvailable: true
+    images: ['/img_library/whoop/aqua_black.png'],
+    isAvailable: true,
+    variants: [
+      { color: 'Black', image: '/img_library/whoop/aqua_black.png' },
+      { color: 'Blue', image: '/img_library/whoop/aqua_blue.png' },
+      { color: 'Red', image: '/img_library/whoop/aqua_red.png' }
+    ]
   },
   {
     name: 'Fitbit Black Graphite',
@@ -51,8 +58,9 @@ const products = [
     price: 64.99,
     stock: 35,
     category: 'Fitbit',
-    images: ['./img_library/fitbit/blackgraphite.jpg'],
-    isAvailable: true
+    images: ['/img_library/fitbit/blackgraphite.jpg'],
+    isAvailable: true,
+    variants: []
   },
   {
     name: 'Fitbit Aqua',
@@ -60,8 +68,9 @@ const products = [
     price: 44.99,
     stock: 35,
     category: 'Swimwear',
-    images: ['./img_library/temp_strap.jpg'],
-    isAvailable: true
+    images: ['/img_library/temp_strap.jpg'],
+    isAvailable: true,
+    variants: []
   }
 ];
 
