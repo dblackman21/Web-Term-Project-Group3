@@ -7,16 +7,23 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/product.css">
     <script src="../js/index.js" defer></script>
-    <!--Potential rework for other product.js?-->
+    <script src="../js/products.js" defer></script>
+    <script src="../js/product-detail.js" defer></script>
 </head>
 <body>
     <header class="main-header">
         <div class="header-left">
-            <button class="icon-btn menu-icon" aria-label="Open menu">&#9776;</button>
+            <button class="icon-btn menu-icon" aria-label="Open menu">&#9776;</button> 
+            <input type="text" id="header-search-input" class="header-search-input" placeholder="Search">
         </div>
+            
         <a href="../index.html" class="logo">BRIDGE-IT</a>
+
         <div class="header-right">
-            <button class="icon-btn cart-icon" aria-label="View cart">&#128722;</button>
+            <button class="icon-btn user-icon" aria-label="User profile">&#128100;</button>
+            <button class="icon-btn cart-icon" id="cart-icon-btn" aria-label="View cart">&#128722;
+                <span id="cart-count-badge" style="display:none;">0</span>
+            </button> 
         </div>
     </header>
 

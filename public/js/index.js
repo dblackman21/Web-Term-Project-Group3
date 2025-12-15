@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (cartIconBtn) {
     cartIconBtn.addEventListener("click", () => {
-      window.location.href = "./pages/cart.html";
+      window.location.href = "/pages/cart.html";
     });
   }
 

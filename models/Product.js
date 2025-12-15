@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
   },
   images: {
     type: [String],
-    default: ['./img_library/temp_strap.jpg'],
+    default: ['/img_library/temp_strap.jpg'],
     validate: {
       validator: function(arr) {
         return arr.length > 0;
@@ -38,13 +38,34 @@ const productSchema = new mongoose.Schema({
     default: function() {
       return this.images && this.images.length > 0 
         ? this.images[0] 
-        : './img_library/temp_strap.jpg';
+        : '/img_library/temp_strap.jpg';
     }
   },
   category: {
     type: String,
     enum: ['Whoop', 'Fitbit', 'Swimwear', 'Tops', 'Bottoms', 'Other'],
     default: 'Other'
+  },
+  variants: {
+    type: [{
+      color: {
+        type: String,
+        required: true
+      },
+      image: {
+        type: String,
+        required: true
+      },
+      sku: {
+        type: String,
+        default: null
+      },
+      price: {
+        type: Number,
+        default: null
+      }
+    }],
+    default: []
   },
   rating: {
     average: {
