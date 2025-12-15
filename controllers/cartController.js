@@ -1,6 +1,7 @@
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
-const { randomUUID } = require('crypto'); 
+const { randomUUID } = require('crypto');
+
 /**
  * Helper: Get or create session ID from cookies
  */
@@ -68,6 +69,7 @@ exports.getCart = async (req, res) => {
     res.status(500).json({ success: false });
   }
 };
+
 /**
  * Add item to cart (works for both authenticated and guest users)
  */
@@ -75,31 +77,41 @@ exports.addToCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
     
-    // Validation
-    if (!productId || quantity === undefined || quantity === null) {
+    // ✅ Validation améliorée
+    if (!productId) {
       return res.status(400).json({
         success: false,
-        message: 'Product ID and quantity are required'
+        message: 'Product ID is required'
       });
     }
     
-    if (quantity < 1) {
+    if (quantity === undefined || quantity === null || quantity < 1) {
       return res.status(400).json({
         success: false,
         message: 'Quantity must be at least 1'
       });
     }
     
-    // Check product
-    const product = await Product.findById(productId);
-    
-    if (!product) {
-      return res.status(404).json({
+    // ✅ Vérification améliorée du format ObjectId
+    if (!productId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({
         success: false,
-        message: 'Product not found'
+        message: 'Invalid product ID format. Expected MongoDB ObjectId (24 hex characters).'
       });
     }
     
+    // ✅ Check product exists
+    const product = await Product.findById(productId);
+    
+    if (!product) {
+      console.error(`Product not found: ${productId}`);
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found. Please make sure the product exists in the database.'
+      });
+    }
+    
+    // ✅ Check availability
     if (!product.checkAvailability()) {
       return res.status(400).json({
         success: false,
@@ -107,6 +119,7 @@ exports.addToCart = async (req, res) => {
       });
     }
     
+    // ✅ Check stock
     if (product.stock < quantity) {
       return res.status(400).json({
         success: false,
@@ -117,9 +130,12 @@ exports.addToCart = async (req, res) => {
     // Get or create cart (unified logic)
     const cart = await getOrCreateCart(req, res);
     
-    // Add item
+    // ✅ Add item avec log pour debug
+    console.log(`Adding to cart: Product ${productId}, Quantity ${quantity}, Price ${product.price}`);
     await cart.addItem(productId, quantity, product.price);
     await cart.populate('items.product');
+    
+    console.log(`✅ Item added successfully. Cart now has ${cart.items.length} items`);
     
     return res.json({
       success: true,
@@ -130,9 +146,19 @@ exports.addToCart = async (req, res) => {
     
   } catch (err) {
     console.error('ADD TO CART ERROR:', err);
+    
+    // ✅ Messages d'erreur plus détaillés
+    if (err.name === 'CastError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid product ID format'
+      });
+    }
+    
     return res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
   }
 };
@@ -165,7 +191,7 @@ exports.updateCartItem = async (req, res) => {
       if (!product) {
         return res.status(404).json({
           success: false,
-          message: 'Product not found in cart'
+          message: 'Product not found'
         });
       }
       
@@ -228,10 +254,10 @@ exports.removeFromCart = async (req, res) => {
     const cart = await Cart.findOne(userId ? { userId } : { sessionId });
 
     if (!cart) {
-        return res.status(404).json({
-            success: false,
-            message: "Cart not found"
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found"
+      });
     }
     
     // Remove item
