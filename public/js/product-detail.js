@@ -45,17 +45,29 @@ async function loadProductDetails() {
 }
 
 /**
+ * Convert image path to work from product detail page  // can remove later if image paths are changed to be absolute in DB
+ */
+function correctImagePath(imagePath) {
+  // If path starts with ./, replace it with ../
+  if (imagePath && imagePath.startsWith('./')) {
+    return imagePath.replace('./', '../');
+  }
+  return imagePath || '../img_library/temp_strap.jpg';
+}
+
+/**
  * Populate the product page with data
  */
 function populateProductPage(product) {
   // Update page title
   document.title = `${product.name} - Bridge-IT`;
 
-  // Product images
-  const mainImage = product.mainImage || (product.images && product.images[0]) || '../img_library/temp_strap.jpg';
+  // Product images - correct the paths for the product page location
+  const mainImagePath = product.mainImage || (product.images && product.images[0]) || './img_library/temp_strap.jpg';
+  const correctedMainImage = correctImagePath(mainImagePath);
   const mainImageElem = document.getElementById('main-product-image');
   if (mainImageElem) {
-    mainImageElem.src = mainImage;
+    mainImageElem.src = correctedMainImage;
     mainImageElem.alt = product.name;
   }
 
@@ -63,7 +75,7 @@ function populateProductPage(product) {
   const thumbnailGallery = document.querySelector('.thumbnail-gallery');
   if (thumbnailGallery && product.images && product.images.length > 0) {
     thumbnailGallery.innerHTML = product.images.map((img, index) => 
-      `<img src="${img}" alt="Thumbnail ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-image-index="${index}">`
+      `<img src="${correctImagePath(img)}" alt="Thumbnail ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-image-index="${index}">`
     ).join('');
     
     // Attach thumbnail click listeners
