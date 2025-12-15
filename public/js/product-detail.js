@@ -1,0 +1,180 @@
+/**
+ * Get product ID from URL query parameter
+ */
+function getProductIdFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id');
+}
+
+/**
+ * Load product details and populate the page
+ */
+async function loadProductDetails() {
+  const productId = getProductIdFromURL();
+  
+  if (!productId) {
+    console.error('No product ID found in URL');
+    document.querySelector('.product-main').innerHTML = '<p style="color: #ff5c5c; padding: 40px;">Product not found. Please go back and try again.</p>';
+    return;
+  }
+
+  try {
+    const response = await fetch(`${PRODUCTS_API_URL}/${productId}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.success || !data.product) {
+      throw new Error('Product not found');
+    }
+
+    const product = data.product;
+    populateProductPage(product);
+    attachEventListeners(product);
+
+  } catch (error) {
+    console.error('Error loading product:', error);
+    document.querySelector('.product-main').innerHTML = '<p style="color: #ff5c5c; padding: 40px;">Error loading product. Please refresh the page.</p>';
+  }
+}
+
+/**
+ * Populate the product page with data
+ */
+function populateProductPage(product) {
+  // Update page title
+  document.title = `${product.name} - Bridge-IT`;
+
+  // Product images
+  const mainImage = product.mainImage || (product.images && product.images[0]) || '../img_library/temp_strap.jpg';
+  const mainImageElem = document.getElementById('main-product-image');
+  if (mainImageElem) {
+    mainImageElem.src = mainImage;
+    mainImageElem.alt = product.name;
+  }
+
+  // Update thumbnail gallery
+  const thumbnailGallery = document.querySelector('.thumbnail-gallery');
+  if (thumbnailGallery && product.images && product.images.length > 0) {
+    thumbnailGallery.innerHTML = product.images.map((img, index) => 
+      `<img src="${img}" alt="Thumbnail ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-image-index="${index}">`
+    ).join('');
+    
+    // Attach thumbnail click listeners
+    attachThumbnailListeners();
+  }
+
+  // Product info
+  document.querySelector('.product-name-detail').textContent = product.name;
+  document.querySelector('.product-cat-detail').textContent = product.category || 'Product';
+  document.querySelector('.current-price').textContent = formatPrice(product.price);
+  document.querySelector('.product-description').textContent = product.description;
+
+  // Update availability
+  const isAvailable = product.isAvailable && product.stock > 0;
+  const addToCartBtn = document.getElementById('add-to-cart-lg');
+  
+  if (!isAvailable) {
+    addToCartBtn.disabled = true;
+    addToCartBtn.textContent = 'OUT OF STOCK';
+  }
+
+  // Set max quantity based on stock
+  const quantityInput = document.getElementById('quantity-input');
+  if (quantityInput) {
+    quantityInput.max = product.stock || 1;
+  }
+}
+
+/**
+ * Attach event listeners for product interactions
+ */
+function attachEventListeners(product) {
+  const addToCartBtn = document.getElementById('add-to-cart-lg');
+  const buyNowBtn = document.getElementById('buy-now-btn');
+  const quantityInput = document.getElementById('quantity-input');
+
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', () => {
+      const quantity = parseInt(quantityInput?.value || 1);
+      addToCartFromDetail(product._id, quantity);
+    });
+  }
+
+  if (buyNowBtn) {
+    buyNowBtn.addEventListener('click', () => {
+      const quantity = parseInt(quantityInput?.value || 1);
+      addToCartFromDetail(product._id, quantity, true); // true = redirect to checkout
+    });
+  }
+}
+
+/**
+ * Add product to cart
+ */
+async function addToCartFromDetail(productId, quantity = 1, redirectToCheckout = false) {
+  try {
+    const response = await fetch(`${CART_API_URL}/add`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ productId, quantity })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.message || 'Failed to add item to cart');
+    }
+
+    // Update cart count in header
+    if (window.updateCartCount) {
+      window.updateCartCount(data.cart);
+    }
+
+    if (redirectToCheckout) {
+      window.location.href = './checkout.html';
+    } else {
+      showNotification('✓ Added to cart!', 'success');
+    }
+
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    showNotification(error.message || 'Error adding item to cart', 'error');
+  }
+}
+
+/**
+ * Attach thumbnail click listeners
+ */
+function attachThumbnailListeners() {
+  const thumbnails = document.querySelectorAll('.thumbnail');
+  const mainImage = document.getElementById('main-product-image');
+
+  thumbnails.forEach(thumbnail => {
+    thumbnail.addEventListener('click', () => {
+      // Remove active class from all thumbnails
+      thumbnails.forEach(thumb => thumb.classList.remove('active'));
+      
+      // Add active class to clicked thumbnail
+      thumbnail.classList.add('active');
+      
+      // Update main image
+      mainImage.src = thumbnail.src;
+      mainImage.alt = thumbnail.alt;
+    });
+  });
+}
+
+/**
+ * Initialize page on load
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  loadProductDetails();
+});

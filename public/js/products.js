@@ -39,7 +39,7 @@ function createProductCard(product) {
             <div class="product-image-container">
                 <span class="product-category">${category}</span>
                 <img src="${productImage}" alt="${product.name}" class="product-image" loading="lazy">
-                <button class="quick-view-btn">Quick view</button>
+                <a href="./pages/product.html?id=${product._id}" class="quick-view-btn">Quick view</a>
             </div>
             <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
