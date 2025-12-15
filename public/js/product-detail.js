@@ -149,6 +149,9 @@ function populateColorSelector(product) {
           mainImage.src = selectedVariant.image;
           mainImage.alt = selectedVariant.color;
         }
+        
+        // Update thumbnail gallery with variant images
+        updateThumbnailGallery([selectedVariant.image]);
       }
     });
   } else {
@@ -224,6 +227,25 @@ async function addToCartFromDetail(productId, quantity = 1, redirectToCheckout =
     console.error('Error adding to cart:', error);
     showNotification(error.message || 'Error adding item to cart', 'error');
   }
+}
+
+/**
+ * Update thumbnail gallery with new images
+ */
+function updateThumbnailGallery(images) {
+  const thumbnailGallery = document.querySelector('.thumbnail-gallery');
+  
+  if (!thumbnailGallery || !images || images.length === 0) {
+    return;
+  }
+
+  // Rebuild thumbnail gallery with new images
+  thumbnailGallery.innerHTML = images.map((img, index) => 
+    `<img src="${img}" alt="Thumbnail ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-image-index="${index}">`
+  ).join('');
+  
+  // Reattach event listeners to new thumbnails
+  attachThumbnailListeners();
 }
 
 /**
