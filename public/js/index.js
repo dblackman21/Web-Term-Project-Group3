@@ -40,7 +40,7 @@ async function loadAndDisplayCart() {
     const response = await fetch(CART_API_BASE_URL, {
       method: 'GET',
       headers: getAuthHeaders(),
-      credentials: 'include' // Important pour les cookies
+      credentials: 'include'
     });
 
     if (!response.ok) {
