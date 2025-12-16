@@ -25,8 +25,13 @@ async function handleLogin(event) {
             localStorage.setItem("user", JSON.stringify(data.user));
         }
 
-        alert("Login successful!");
+        await mergeGuestCartAfterLogin(data.token);
 
+        if (window.navAPI) {
+            window.navAPI.updateSideMenu();
+        }
+
+        alert("Login successful!");
         window.location.href = "/";
 
     } catch (err) {
@@ -35,3 +40,29 @@ async function handleLogin(event) {
     }
 }
 
+/**
+ * Merge guest cart with user cart after successful login
+ */
+async function mergeGuestCartAfterLogin(token) {
+    try {
+        const response = await fetch('/cart/merge', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include' // Important pour envoyer les cookies
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log('Cart merged successfully:', data.message);
+        } else {
+            console.warn('Cart merge warning:', data.message);
+        }
+    } catch (error) {
+        console.error('MERGE CART ERROR:', error);
+        // Ne pas bloquer le login si le merge échoue
+    }
+}

@@ -169,6 +169,18 @@ function attachEventListeners(product) {
   const buyNowBtn = document.getElementById('buy-now-btn');
   const quantityInput = document.getElementById('quantity-input');
   const colorSelect = document.getElementById('color-select');
+  const userBtn = document.getElementById('user-icon-btn');
+
+  if (userBtn) {
+    userBtn.addEventListener("click", () => {
+      const authToken = localStorage.getItem('authToken');
+      if (authToken) {
+        window.location.href = "profile.html";
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+  }
 
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', () => {
