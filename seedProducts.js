@@ -187,6 +187,24 @@ const products = [
     category: 'Bottoms',
     images: ['/img_library/bottoms/shorts_black.jpg'],
     isAvailable: true
+  },
+  {
+    name: 'Nexus Performance Shorts - Red',
+    description: 'High-performance athletic shorts featuring our proprietary Nexus pod-pocket. Securely house your Fitbit or Whoop module directly in your apparel for wrist-free tracking during runs, lifts, or any activity. Classic black.',
+    price: 46.99,
+    stock: 60,
+    category: 'Bottoms',
+    images: ['/img_library/bottoms/shorts_red.jpg'],
+    isAvailable: true
+  },
+  {
+    name: 'Nexus Performance Shorts - Navy',
+    description: 'High-performance athletic shorts featuring our proprietary Nexus pod-pocket. Securely house your Fitbit or Whoop module directly in your apparel for wrist-free tracking during runs, lifts, or any activity. Classic black.',
+    price: 46.99,
+    stock: 60,
+    category: 'Bottoms',
+    images: ['/img_library/bottoms/shorts_navy.jpg'],
+    isAvailable: true
   }
 ];
 
