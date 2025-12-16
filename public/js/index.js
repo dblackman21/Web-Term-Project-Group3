@@ -68,9 +68,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const productList = document.getElementById("product-list");
   const HEADER_OFFSET = 100;
   const userIconBtn = document.querySelector(".user-icon");
+  const searchInput = document.getElementById('header-search-input');
   
   // Load cart count on page load
-  loadAndDisplayCart();
+  loadAndDisplayCart();  
+
+if (searchInput) {
+    let searchTimeout;
+    
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            if (typeof window.performSearch === 'function') {
+                window.performSearch(query);
+            }
+        }, 500);
+    });
+    
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            clearTimeout(searchTimeout);
+            if (typeof window.performSearch === 'function') {
+                window.performSearch(e.target.value.trim());
+            }
+        }
+    });
+}
 
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {

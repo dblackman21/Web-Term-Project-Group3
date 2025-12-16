@@ -97,6 +97,32 @@ async function loadAndRenderProducts() {
         productListContainer.innerHTML = '<p style="color: #ff5c5c; text-align: center; padding: 40px;">Error loading products. Please refresh the page.</p>';
     }
 }
+/**
+ * Expose performSearch to the global window object so index.js can call it
+ */
+window.performSearch = async function(query) {
+    const productListContainer = document.getElementById('product-list');
+    
+    try {
+        const url = query ? `/products?search=${encodeURIComponent(query)}` : '/products';
+        
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.success && data.products) {
+            const productsHTML = data.products.map(createProductCard).join('');
+            productListContainer.innerHTML = productsHTML || '<p style="text-align:center; padding:20px;">No results found.</p>';
+
+            attachAddToCartListeners();
+            
+            if (query && data.products.length > 0) {
+                productListContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    } catch (err) {
+        console.error('Search Error:', err);
+    }
+};
 
 /**
  * Add product to cart
