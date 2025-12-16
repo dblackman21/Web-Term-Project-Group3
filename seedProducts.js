@@ -59,7 +59,7 @@ const products = [
     variants: [
       { color: 'Black', image: '/img_library/whoop/aqua_black.jpg' },
       { color: 'Spring Green', image: '/img_library/whoop/aqua_spring.jpeg' },
-      { color: 'Red', image: '/img_library/whoop/aqua_purple.jpg' }
+      { color: 'Purple', image: '/img_library/whoop/aqua_purple.jpg' }
     ]
   },
   {
@@ -71,9 +71,9 @@ const products = [
     images: ['/img_library/fitbit/aqua_black.jpg'],
     isAvailable: true,
     variants: [
-      {color: 'Spring Green', image: '/img_library/fitbit/aqua_spring.jpg'},
-      {color: 'Purple', image: '/img_library/fitbit/aqua_purple.jpg'},
       {color: 'Black', image: '/img_library/fitbit/aqua_black.jpg'},
+      {color: 'Spring Green', image: '/img_library/fitbit/aqua_spring.jpg'},
+      {color: 'Purple', image: '/img_library/fitbit/aqua_purple.jpg'}      
     ]
   },
   {
@@ -111,8 +111,8 @@ const products = [
     images: ['/img_library/bottoms/shorts_black.jpg'],
     isAvailable: true,
     variants: [
-      {color: 'Navy', image: '/img_library/bottoms/shorts_navy.jpg'},
       {color: 'Black', image: '/img_library/bottoms/shorts_black.jpg'},
+      {color: 'Navy', image: '/img_library/bottoms/shorts_navy.jpg'},
       {color: 'Red', image: '/img_library/bottoms/shorts_red.jpg'}
     ]
   },
