@@ -90,7 +90,7 @@ async function loadAndRenderProducts() {
         // Attach event listeners to new buttons
         attachAddToCartListeners();
 
-        console.log(`✅ Loaded ${data.products.length} products`);
+        console.log(`[SUCCESS] Loaded ${data.products.length} products`);
 
     } catch (error) {
         console.error('LOAD PRODUCTS ERROR:', error);
