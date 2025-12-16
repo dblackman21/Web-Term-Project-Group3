@@ -104,6 +104,15 @@ const products = [
     isAvailable: true
   },
   {
+    name: 'Fitbit Sol - Maroon',
+    description: 'A sleek, everyday replacement strap for Fitbit users. Crafted from soft-touch, breathable nylon, it offers a stylish look that transitions perfectly from the gym to the office. Bold maroon colorway.',
+    price: 34.99,
+    stock: 42,
+    category: 'Fitbit',
+    images: ['/img_library/fitbit/sol_red.jpg'],
+    isAvailable: true
+  },
+  {
     name: 'Fitbit Lux - Brown',
     description: 'Elevate your wearable with our premium leather Lux series. Featuring genuine leather and polished hardware, it provides a sophisticated aesthetic without compromising your data tracking. Luxurious brown.',
     price: 64.99,
@@ -216,7 +225,22 @@ async function seedProducts() {
     console.log('🌱 Creating products...');
     const createdProducts = await Product.insertMany(products);
     
-    console.log('\n✅ Products created successfully!\n');
+    console.log('🔗 Linking related variants...');
+    for (let product of createdProducts) {
+      const baseName = product.name.split(' - ')[0];
+      
+      const relatedProducts = createdProducts.filter(p => p.name.startsWith(baseName));
+      
+      const linkedVariants = relatedProducts.map(rp => ({
+        color: rp.name.split(' - ')[1] || 'Standard',
+        image: rp.images[0], 
+        productId: rp._id 
+      }));
+      
+      await Product.findByIdAndUpdate(product._id, { variants: linkedVariants });
+    }
+
+    console.log('\n✅ Products seeded and variants linked successfully!\n');
     
     console.log('📦 Created products:');
     console.log('='.repeat(80));
@@ -244,7 +268,6 @@ ${index + 1}. ${product.name}
     
     console.log('\n💡 Total products created:', createdProducts.length);
     console.log('='.repeat(80));
-    
     process.exit(0);
   } catch (error) {
     console.error('❌ Error seeding products:', error);
