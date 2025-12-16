@@ -48,24 +48,18 @@ const productSchema = new mongoose.Schema({
   },
   variants: {
     type: [{
-      color: {
-        type: String,
-        required: true
-      },
-      image: {
-        type: String,
-        required: true
-      },
-      sku: {
-        type: String,
-        default: null
-      },
-      price: {
-        type: Number,
-        default: null
-      }
-    }],
-    default: []
+    color: { type: String, required: true },
+    image: { type: String, required: true },
+    // ADD THIS: Reference to the specific product document for this color
+    productId: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Product',
+      default: null 
+    },
+    sku: { type: String, default: null },
+    price: { type: Number, default: null }
+  }],
+  default: []
   },
   rating: {
     average: {

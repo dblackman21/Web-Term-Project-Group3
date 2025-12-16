@@ -120,42 +120,28 @@ function populateColorSelector(product) {
     return;
   }
 
-  // If product has variants, populate dropdown
   if (product.variants && product.variants.length > 0) {
-    // Clear existing options
     colorSelect.innerHTML = '';
     
-    // Add variant options
-    product.variants.forEach((variant, index) => {
+    product.variants.forEach((variant) => {
       const option = document.createElement('option');
-      option.value = index;
+      option.value = variant.productId; 
       option.textContent = variant.color;
-      option.dataset.image = variant.image;
+      
+      if (variant.productId === product._id) {
+        option.selected = true;
+      }
       colorSelect.appendChild(option);
     });
 
-    // Store product for later reference when adding to cart
-    colorSelect.dataset.productVariants = JSON.stringify(product.variants);
-    
-    // Add event listener to update image when color changes
+    colorSelect.disabled = false;
     colorSelect.addEventListener('change', () => {
-      const selectedIndex = parseInt(colorSelect.value);
-      const selectedVariant = product.variants[selectedIndex];
-      
-      if (selectedVariant && selectedVariant.image) {
-        // Update main image
-        const mainImage = document.getElementById('main-product-image');
-        if (mainImage) {
-          mainImage.src = selectedVariant.image;
-          mainImage.alt = selectedVariant.color;
-        }
-        
-        // Update thumbnail gallery with variant images
-        updateThumbnailGallery([selectedVariant.image]);
+      const targetId = colorSelect.value;
+      if (targetId && targetId !== product._id) {
+        window.location.href = `./product.html?id=${targetId}`;
       }
     });
   } else {
-    // If no variants, disable the color selector
     colorSelect.disabled = true;
     colorSelect.innerHTML = '<option>No color options available</option>';
   }
