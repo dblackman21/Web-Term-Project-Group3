@@ -1,15 +1,17 @@
-// Importer mongoose
+// Import mongoose
 const mongoose = require('mongoose');
-require('dotenv').config;
-
+require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI) 
+    const mongoURI =
+      process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/bridgeit';
+
+    await mongoose.connect(mongoURI);
+
     console.log('Connected to MongoDB');
-    
   } catch (error) {
-    console.error(`Failed to connect to MongoDB: ${error}`);
+    console.error('Failed to connect to MongoDB:', error.message);
     process.exit(1);
   }
 };
