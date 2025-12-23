@@ -4,7 +4,7 @@
 <p><strong>Authors:</strong><br>
 Devon Blackman · Ian Brown · David Wu</p>
 
-<p><strong>The deployed site can be accessed <a href link="https://web-term-project-group3.onrender.com/">here</a> .</strong></p>
+<p><strong>The deployed site can be accessed <a href link="https://web-term-project-group3.onrender.com/">here</a> .</strong> https://web-term-project-group3.onrender.com/</p> 
 
 <hr>
 
